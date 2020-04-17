@@ -50,6 +50,7 @@ public enum ExceptionType {
     LOGIN_USERNAME_NOT_EXISTS(10603, "用户名不存在"),
     LOGIN_PASSWORD_ERROR(10604, "密码错误"),
     LOGIN_USER_DISABLED(10605, "该用户已被禁用"),
+    LOGIN_USERNAME_PASSWORD_ERROR(10606, "用户名或密码错误"),
 
     /**
      * 角色

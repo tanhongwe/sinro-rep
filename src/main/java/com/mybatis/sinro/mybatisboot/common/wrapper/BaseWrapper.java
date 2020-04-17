@@ -1,9 +1,6 @@
 package com.mybatis.sinro.mybatisboot.common.wrapper;
 
 
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.mybatis.sinro.mybatisboot.common.rsa.BaseVo;
-
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,7 +14,7 @@ import java.lang.reflect.Type;
  * @Date: 2018/8/16
  * @Description:
  **/
-public abstract class BaseWrapper<T extends Model, F extends BaseVo> {
+public abstract class BaseWrapper<T, F> {
     /**
      * 实体类的class
      */

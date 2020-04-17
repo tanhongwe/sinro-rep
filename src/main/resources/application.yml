@@ -1,3 +1,8 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /sinro
+
 #数据源
 spring:
   datasource:

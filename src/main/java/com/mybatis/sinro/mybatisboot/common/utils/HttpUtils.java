@@ -41,8 +41,12 @@ public class HttpUtils {
         return getIpAddr(getRequest());
     }
 
-    public static int getPort(){
+    public static int getRemotePort(){
         return getRequest().getRemotePort();
+    }
+
+    public static int getLocalPort(){
+        return getRequest().getLocalPort();
     }
     /***
      * 获取客户端IP地址;这里通过了Nginx获取;X-Real-IP,

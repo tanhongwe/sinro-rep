@@ -1,13 +1,14 @@
 package com.mybatis.sinro.mybatisboot.common.wrapper;
 
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mybatis.sinro.mybatisboot.common.enumeration.ExceptionType;
 import com.mybatis.sinro.mybatisboot.common.exception.SinroException;
-import com.mybatis.sinro.mybatisboot.common.rsa.BaseVo;
+import com.mybatis.sinro.mybatisboot.common.utils.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -53,7 +54,7 @@ public class ControllerWrapper implements InitializingBean, ApplicationContextAw
         this.ctx = applicationContext;
     }
 
-    public <T extends Model, F extends BaseVo> List<F> warp(List<T> model, Class<F> dataClass) {
+    public <T, F> List<F> warp(List<T> model, Class<F> dataClass) {
         List<F> data = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(model)) {
             model.forEach(t -> {
@@ -67,7 +68,26 @@ public class ControllerWrapper implements InitializingBean, ApplicationContextAw
         return data;
     }
 
-    public <T extends Model, F extends BaseVo> F warp(T model, Class<F> dataClass) throws IOException {
+    public <T,F> IPage<F> pageWarp(IPage<T> page, Class<F> dataClass) {
+        List<T> model = page.getRecords();
+        List<F> data = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(model)) {
+            model.forEach(t -> {
+                try {
+                    data.add(warp(t, dataClass));
+                } catch (IOException e) {
+                    throw new SinroException(ExceptionType.SERVER_ERROR);
+                }
+            });
+        }
+        IPage<F> pageF = new Page<>();
+        page.setRecords(null);
+        BeanUtils.copyProperties(page,pageF);
+        pageF.setRecords(data);
+        return pageF;
+    }
+
+    public <T, F> F warp(T model, Class<F> dataClass) throws IOException {
         BaseWrapper baseWrapper = WRAPPERS.get(generateKey(model.getClass(), dataClass));
         if (baseWrapper == null) {
             throw new RuntimeException("没有找到 " + model.getClass().getName() + " 的 VO 转化器" + generateKey(model.getClass(), dataClass));

@@ -4,7 +4,7 @@ package com.mybatis.sinro.mybatisboot.common.utils;
 import com.mybatis.sinro.mybatisboot.common.enumeration.ExceptionType;
 import com.mybatis.sinro.mybatisboot.common.excel.handler.ExcelHandle;
 import com.mybatis.sinro.mybatisboot.common.exception.SinroException;
-import com.mybatis.sinro.mybatisboot.common.rsa.Count;
+import com.mybatis.sinro.mybatisboot.common.bean.Count;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
