@@ -1,11 +1,12 @@
 package com.mybatis.sinro.mybatisboot.common.jwt.filter;
 
+import com.mybatis.sinro.mybatisboot.common.bean.Result;
 import com.mybatis.sinro.mybatisboot.common.constant.StringConstants;
 import com.mybatis.sinro.mybatisboot.common.enumeration.ExceptionType;
-import com.mybatis.sinro.mybatisboot.common.bean.Result;
 import com.mybatis.sinro.mybatisboot.common.utils.HttpUtils;
 import com.mybatis.sinro.mybatisboot.common.utils.JsonUtils;
 import com.mybatis.sinro.mybatisboot.common.utils.JwtTokenUtils;
+import com.mybatis.sinro.mybatisboot.system.bean.LoginUser;
 import com.mybatis.sinro.mybatisboot.system.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                                 HttpServletResponse response) throws AuthenticationException {
         log.info("开启配置jwt");
         String json = HttpUtils.getRequestBody();
-        User user = JsonUtils.json2Obj(json,User.class);
+        LoginUser user = JsonUtils.json2Obj(json,LoginUser.class);
         //这里的username会传给UserDetailsService的loadUserByUsername方法，作为loadUserByUsername的参数。
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 

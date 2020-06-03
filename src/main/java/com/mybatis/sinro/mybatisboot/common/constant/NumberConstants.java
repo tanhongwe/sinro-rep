@@ -2,9 +2,6 @@ package com.mybatis.sinro.mybatisboot.common.constant;
 
 /**
  * @ClassName: NumberConstants
- * @Package com.tce.common.constant
- * @Description:
- * @Author wuxinjian
  * @Date 2018/12/6 15:45
  * @Version V1.0
  */

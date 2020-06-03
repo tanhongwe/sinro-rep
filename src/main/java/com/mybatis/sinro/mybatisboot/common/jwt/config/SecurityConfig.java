@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/actuator/**",
                         "/operation/log/add","/check/createImageCode","/check/checkImageCode/**","/cache/**",
-                        "/operation/log/download/**","/user/**").permitAll()
+                        "/operation/log/download/**","/user/**","/test/**").permitAll()
                 //所有请求
                 .anyRequest()
                 //不需要验证

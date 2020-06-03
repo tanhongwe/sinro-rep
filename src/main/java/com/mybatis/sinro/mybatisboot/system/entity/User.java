@@ -79,7 +79,7 @@ public class User extends Model<User> implements UserDetails {
     @TableField("status")
     private Integer status;
     /**
-     * 邮箱
+     * 0删除1未删
      */
     @TableField("del")
     private Integer del;

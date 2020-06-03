@@ -1,5 +1,8 @@
 package com.mybatis.sinro.mybatisboot.common.utils;
 
+import com.mybatis.sinro.mybatisboot.common.constant.NumberConstants;
+import com.mybatis.sinro.mybatisboot.common.constant.StringConstants;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.util.Base64Utils;
 
 import javax.imageio.ImageIO;
@@ -8,10 +11,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -116,5 +116,72 @@ public class ImageUtils {
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @param base64
+     * @return
+     */
+    public static String compressImage (String base64) {
+        try {
+            File distFile = new File("temp" + File.separator + "thumbnail" + File.separator + UUIDUtils.create() + ".jpg");
+            if (!distFile.exists()) {
+                if (!distFile.getParentFile().exists()) {
+                    distFile.getParentFile().mkdirs();
+                }
+                distFile.createNewFile();
+            }
+            byte[] src = Base64Utils.decodeFromString(base64);
+            ByteArrayInputStream in = new ByteArrayInputStream(src);
+            Thumbnails.of(in).scale(0.7).outputQuality(0.8).toFile(distFile);
+            //Thumbnails.of(in).size(compressProperties.getWidth(), compressProperties.getHeight()).keepAspectRatio(false).toFile(distFile);
+            InputStream inputStream = null;
+            byte[] bytes;
+            try {
+                inputStream = new FileInputStream(distFile);
+                bytes = new byte[inputStream.available()];
+                inputStream.read(bytes, 0, bytes.length);
+            } finally {
+                if (Objects.nonNull(inputStream)) {
+                    inputStream.close();
+                }
+                if (distFile.exists()) {
+                    distFile.delete();
+                }
+            }
+            return Base64Utils.encodeToString(bytes);
+        } catch (Exception ignored) {
+        }
+        return base64;
+    }
+
+    /**
+     * 计算图片大小
+     * @param imageBase64 图片Base64编码
+     * @return
+     */
+    public static Integer imageSize(String imageBase64) {
+        Integer equalIndex= imageBase64.indexOf(StringConstants.EQUAL_SIGN);
+        if(imageBase64.indexOf(StringConstants.EQUAL_SIGN)>0) {
+            imageBase64=imageBase64.substring(0, equalIndex);
+        }
+        Integer strLength=imageBase64.length();
+        Integer size=strLength-(strLength/8)*2;
+        return size;
+    }
+
+    /**
+     * 计算图片大小,返回不超过maxSize的图片
+     * @param imageBase64 图片Base64编码
+     * @param maxSize 图片最大尺寸，如果图片超过此尺寸会返回压缩后图片,默认单位kb
+     * @return
+     */
+    public static String imageSize(String imageBase64,int maxSize) {
+        int size = imageSize(imageBase64);
+        if (size > maxSize * NumberConstants.ONE_THOUSAND_TWENTY_FOUR) {
+            return compressImage(imageBase64);
+        }
+        return imageBase64;
     }
 }

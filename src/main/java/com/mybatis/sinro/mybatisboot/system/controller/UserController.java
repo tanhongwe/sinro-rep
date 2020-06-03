@@ -57,4 +57,9 @@ public class UserController extends BaseController {
         ExcelDownLoadUtil.simpleDown(userService.list(),new String[]{"用户名","密码","电话号码"},res);
     }
 
+    @GetMapping("/current")
+    public String current(){
+        User user = userService.getUserById(HttpUtils.getUserId());
+        return success(user, UserVo.class);
+    }
 }
